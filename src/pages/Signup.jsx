@@ -26,7 +26,8 @@ export default function Signup() {
         navigate('/login');
       }
     } catch (err) {
-      setError('Server error');
+      console.error('Signup error:', err);
+      setError('Server error: ' + err.message);
     }
   };
 
