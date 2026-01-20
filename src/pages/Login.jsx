@@ -12,23 +12,25 @@ export default function Login() {
     e.preventDefault();
     setError('');
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
+      console.log('Login response:', response.status, data);
       if (!response.ok) {
-        setError(data.message || 'Login failed');
+        setError(data.message || data.error || 'Login failed');
       } else {
         // Save token and user info in localStorage
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
-        localStorage.setItem('userId', data.user._id);
+        localStorage.setItem('userId', data.user.id);
         navigate('/');
       }
     } catch (err) {
-      setError('Server error');
+      console.error('Login fetch error:', err);
+      setError('Server error: ' + err.message);
     }
   };
 
